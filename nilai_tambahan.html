@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Input Nilai Tambahan</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px auto;
+      max-width: 500px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #ccc;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px 6px;
+      font-size: 1em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 1.1em;
+      border-radius: 30px;
+      border: none;
+      background-color: #0f172a;
+      color: white;
+      cursor: pointer;
+      float: right;
+    }
+    button:hover {
+      background-color: #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Input Nilai Tambahan</h2>
+
+<form id="nilaiForm">
+  <label for="kelas">Pilih Kelas</label>
+  <select name="kelas" id="kelas" required>
+    <option value="">-- Pilih Kelas --</option>
+    <!-- 1 ULLA A sampai H -->
+    <option value="1_ULLA_A">1 ULLA A</option>
+    <option value="1_ULLA_B">1 ULLA B</option>
+    <option value="1_ULLA_C">1 ULLA C</option>
+    <option value="1_ULLA_D">1 ULLA D</option>
+    <option value="1_ULLA_E">1 ULLA E</option>
+    <option value="1_ULLA_F">1 ULLA F</option>
+    <option value="1_ULLA_G">1 ULLA G</option>
+    <option value="1_ULLA_H">1 ULLA H</option>
+    <!-- 2 ULLA A sampai H -->
+    <option value="2_ULLA_A">2 ULLA A</option>
+    <option value="2_ULLA_B">2 ULLA B</option>
+    <option value="2_ULLA_C">2 ULLA C</option>
+    <option value="2_ULLA_D">2 ULLA D</option>
+    <option value="2_ULLA_E">2 ULLA E</option>
+    <option value="2_ULLA_F">2 ULLA F</option>
+    <option value="2_ULLA_G">2 ULLA G</option>
+    <option value="2_ULLA_H">2 ULLA H</option>
+    <!-- 3 ULLA A sampai H -->
+    <option value="3_ULLA_A">3 ULLA A</option>
+    <option value="3_ULLA_B">3 ULLA B</option>
+    <option value="3_ULLA_C">3 ULLA C</option>
+    <option value="3_ULLA_D">3 ULLA D</option>
+    <option value="3_ULLA_E">3 ULLA E</option>
+    <option value="3_ULLA_F">3 ULLA F</option>
+    <option value="3_ULLA_G">3 ULLA G</option>
+    <option value="3_ULLA_H">3 ULLA H</option>
+    <!-- 1 WUSTHO A sampai D -->
+    <option value="1_WUSTHO_A">1 WUSTHO A</option>
+    <option value="1_WUSTHO_B">1 WUSTHO B</option>
+    <option value="1_WUSTHO_C">1 WUSTHO C</option>
+    <option value="1_WUSTHO_D">1 WUSTHO D</option>
+    <!-- 2 WUSTHO PA, PI -->
+    <option value="2_WUSTHO_PA">2 WUSTHO PA</option>
+    <option value="2_WUSTHO_PI">2 WUSTHO PI</option>
+    <!-- 3 WUSTHO PA, PI -->
+    <option value="3_WUSTHO_PA">3 WUSTHO PA</option>
+    <option value="3_WUSTHO_PI">3 WUSTHO PI</option>
+  </select>
+
+  <label for="nama">NAMA</label>
+  <input type="text" id="nama" name="nama" required />
+
+  <label for="takror_nahwu">TAKROR NAHWU</label>
+  <input type="text" id="takror_nahwu" name="takror_nahwu" required />
+
+  <label for="takror_shorof">TAKROR SHOROF</label>
+  <input type="text" id="takror_shorof" name="takror_shorof" required />
+
+  <label for="sorogan">SOROGAN</label>
+  <input type="text" id="sorogan" name="sorogan" required />
+
+  <label for="taftis_nahwu">TAFTIS NAHWU</label>
+  <input type="text" id="taftis_nahwu" name="taftis_nahwu" required />
+
+  <label for="taftis_shorof">TAFTIS SHOROF</label>
+  <input type="text" id="taftis_shorof" name="taftis_shorof" required />
+
+  <label for="taftis_fiqih">TAFTIS FIQIH</label>
+  <input type="text" id="taftis_fiqih" name="taftis_fiqih" required />
+
+  <label for="taftis_tauhid">TAFTIS TAUHID</label>
+  <input type="text" id="taftis_tauhid" name="taftis_tauhid" required />
+
+  <label for="taftis_akhlaq">TAFTIS AKHLAK</label>
+  <input type="text" id="taftis_akhlaq" name="taftis_akhlaq" required />
+
+  <label for="izin">IZIN</label>
+  <input type="text" id="izin" name="izin" required />
+
+  <label for="alfa">ALFA</label>
+  <input type="text" id="alfa" name="alfa" required />
+
+  <label for="sakit">SAKIT</label>
+  <input type="text" id="sakit" name="sakit" required />
+
+  <label for="nama_mustahiq">NAMA MUSTAHIQ</label>
+  <input type="text" id="nama_mustahiq" name="nama_mustahiq" required />
+
+  <button type="submit">KIRIM</button>
+</form>
+
+<script>
+  const form = document.getElementById('nilaiForm');
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyWl-zTV57NKDzaNuCNcPIjjw6BTA8ytOjdGIr9tXfmkq6SpFZFBZ4nDLDbh45Shdsz/exec'; // ← ISI LINK WEB APP ANDA DI SINI
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: new URLSearchParams(new FormData(form))
+    })
+      .then(response => response.text())
+      .then(text => {
+        alert(text);
+        if (text.toLowerCase().includes("sukses")) {
+          form.reset();
+        }
+      })
+      .catch(error => alert('Error: ' + error.message));
+  });
+</script>
+
+</body>
+</html>
