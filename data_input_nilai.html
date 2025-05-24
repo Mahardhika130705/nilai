@@ -2,125 +2,201 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Data Nilai Ujian</title>
+  <title>Data Nilai Santri</title>
   <style>
     body {
-      font-family: sans-serif;
-      margin: 20px auto;
-      max-width: 800px;
-      background-color: #f9f9f9;
+      background: #0d0f1f;
+      color: white;
+      font-family: Arial, sans-serif;
       padding: 20px;
+    }
+    select {
+      padding: 10px;
+      font-size: 16px;
+      background: #1a1c30;
+      color: white;
       border-radius: 8px;
-      box-shadow: 0 0 8px #ccc;
+      border: none;
     }
     table {
+      margin-top: 20px;
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      background-color: #fff;
+      color: #000;
     }
     th, td {
-      border: 1px solid #ccc;
       padding: 8px;
-      text-align: left;
+      text-align: center;
+      border: 1px solid #ccc;
     }
     th {
-      background-color: #0f172a;
+      background-color: #1a1c30;
       color: white;
+    }
+    .btn-print {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .btn-print:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
 
-<h2>Data Nilai Ujian</h2>
+  <h2>Data Nilai Santri</h2>
+  <label for="kelasDropdown">Pilih Kelas:</label>
+  <select id="kelasDropdown">
+    <option value="">-- Pilih --</option>
+  </select>
 
-<label for="kelas">Pilih Kelas</label>
-<select name="kelas" id="kelas" onchange="loadData()">
-  <option value="">-- Pilih Kelas --</option>
-  <option value="1_ULLA_A">1 ULLA A</option>
-  <option value="1_ULLA_B">1 ULLA B</option>
-  <option value="1_ULLA_C">1 ULLA C</option>
-  <option value="1_ULLA_D">1 ULLA D</option>
-  <option value="1_ULLA_E">1 ULLA E</option>
-  <option value="1_ULLA_F">1 ULLA F</option>
-  <option value="1_ULLA_G">1 ULLA G</option>
-  <option value="1_ULLA_H">1 ULLA H</option>
-  <option value="2_ULLA_A">2 ULLA A</option>
-  <option value="2_ULLA_B">2 ULLA B</option>
-  <option value="2_ULLA_C">2 ULLA C</option>
-  <option value="2_ULLA_D">2 ULLA D</option>
-  <option value="2_ULLA_E">2 ULLA E</option>
-  <option value="2_ULLA_F">2 ULLA F</option>
-  <option value="2_ULLA_G">2 ULLA G</option>
-  <option value="2_ULLA_H">2 ULLA H</option>
-  <option value="3_ULLA_A">3 ULLA A</option>
-  <option value="3_ULLA_B">3 ULLA B</option>
-  <option value="3_ULLA_C">3 ULLA C</option>
-  <option value="3_ULLA_D">3 ULLA D</option>
-  <option value="3_ULLA_E">3 ULLA E</option>
-  <option value="3_ULLA_F">3 ULLA F</option>
-  <option value="3_ULLA_G">3 ULLA G</option>
-  <option value="3_ULLA_H">3 ULLA H</option>
-  <option value="1_WUSTHO_A">1 WUSTHO A</option>
-  <option value="1_WUSTHO_B">1 WUSTHO B</option>
-  <option value="1_WUSTHO_C">1 WUSTHO C</option>
-  <option value="1_WUSTHO_D">1 WUSTHO D</option>
-  <option value="2_WUSTHO_PA">2 WUSTHO PA</option>
-  <option value="2_WUSTHO_PI">2 WUSTHO PI</option>
-  <option value="3_WUSTHO_PA">3 WUSTHO PA</option>
-  <option value="3_WUSTHO_PI">3 WUSTHO PI</option>
-</select>
+  <table id="tabelNilai">
+    <thead id="tabelHeader"></thead>
+    <tbody id="tabelBody"></tbody>
+  </table>
 
-<table id="nilaiTable" style="display:none;">
-  <thead>
-    <tr>
-      <th>Nama</th>
-      <th>Nilai Ujian Lisan</th>
-      <th>Nilai Ujian Tulis</th>
-      <th>Nilai Tambahan</th>
-    </tr>
-  </thead>
-  <tbody id="tableBody">
-    <!-- Data akan dimuat di sini -->
-  </tbody>
-</table>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxDjPfncS17G14sSSNCIaJ760zhsrU91-aOZPMhRpj61i7LppyvMLg60JMwkByVsXjXvA/exec";
 
-<script>
-  function loadData() {
-    const kelas = document.getElementById('kelas').value;
-    const tableBody = document.getElementById('tableBody');
-    const nilaiTable = document.getElementById('nilaiTable');
+    const kolomHeader = [
+      "NAMA",
+      "NAHWU",
+      "SHOROF",
+      "FIQIH",
+      "TAUHID",
+      "AMTSILAH_TASHRIFIYYAH",
+      "MENGI'ROB",
+      "NAMA_TENGAH",
+      "TAKROR_NAHWU",
+      "TAKROR_SHOROF",
+      "SOROGAN",
+      "TAFTIS_NAHWU",
+      "TAFTIS_SHOROF",
+      "TAFTIS_FIQIH",
+      "TAFTIS_TAUHID",
+      "TAFTIS_AKHLAK",
+      "IZIN",
+      "ALFA",
+      "SAKIT",
+      "NAMA_MUSTAHIQ"
+    ];
 
-    if (kelas) {
-      // Ganti URL di bawah ini dengan URL API Google Sheets Anda
-      const sheetURL = `https://api.example.com/sheets/${kelas}`; // Ganti dengan URL yang sesuai
-
-      fetch(sheetURL)
-        .then(response => response.json())
-        .then(data => {
-          tableBody.innerHTML = '';
-          data.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${item.nama}</td>
-              <td>${item.nilai_lisan}</td>
-              <td>${item.nilai_tulis}</td>
-              <td>${item.nilai_tambahan}</td>
-            `;
-            tableBody.appendChild(row);
-          });
-          nilaiTable.style.display = data.length > 0 ? 'table' : 'none';
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          alert('Terjadi kesalahan saat mengambil data.');
+    // Load daftar sheet ke dropdown
+    fetch(`${API_URL}?tipe=daftarSheet`)
+      .then(res => res.json())
+      .then(sheets => {
+        const dropdown = document.getElementById("kelasDropdown");
+        sheets.forEach(sheet => {
+          const opt = document.createElement("option");
+          opt.value = sheet;
+          opt.textContent = sheet;
+          dropdown.appendChild(opt);
         });
-    } else {
-      tableBody.innerHTML = '';
-      nilaiTable.style.display = 'none';
-    }
-  }
-</script>
+      }).catch(e => alert("Gagal memuat daftar sheet: " + e));
 
+    // Fungsi membuat header tabel
+    function buatHeader() {
+      const headerRow = document.createElement("tr");
+      kolomHeader.forEach(hdr => {
+        // Ubah "NAMA_TENGAH" agar header tetap "NAMA"
+        const teksHeader = hdr === "NAMA_TENGAH" ? "NAMA" : hdr;
+        const th = document.createElement("th");
+        th.textContent = teksHeader;
+        headerRow.appendChild(th);
+      });
+      // Tambah header kolom aksi PRINT
+      const thAksi = document.createElement("th");
+      thAksi.textContent = "AKSI";
+      headerRow.appendChild(thAksi);
+      return headerRow;
+    }
+
+    // Event saat pilih sheet
+    document.getElementById("kelasDropdown").addEventListener("change", function () {
+      const sheet = this.value;
+      if (!sheet) return;
+
+      fetch(`${API_URL}?tipe=dataSheet&sheet=${encodeURIComponent(sheet)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+
+          const header = document.getElementById("tabelHeader");
+          const body = document.getElementById("tabelBody");
+
+          header.innerHTML = "";
+          body.innerHTML = "";
+
+          // Buat header tabel
+          header.appendChild(buatHeader());
+
+          // Render tiap baris data
+          data.forEach(santri => {
+            const row = document.createElement("tr");
+
+            // Siapkan array nilai yang disusun sesuai kolomHeader
+            // Kolom "NAMA_TENGAH" di data diabaikan, asumsikan di data index 7 adalah "NAMA" tengah
+            // Tetapi kita tetap tampilkan karena kolomHeader ada 20 kolom
+            // Namun untuk print, abaikan kolom "NAMA_TENGAH" (index 7)
+            const nilai = [];
+
+            // Kolom 0 = NAMA utama
+            nilai.push(santri.nama);
+
+            // Berikutnya adalah nilai sesuai kolomHeader dari data.nilai (panjang 19 kolom)
+            // Asumsi data.nilai array sesuai urutan header dari indeks 1 sampai 19
+            // total 19 kolom nilai per santri (NAMA_TENGAH juga termasuk di posisi ke 7)
+            for (let i = 0; i < santri.nilai.length; i++) {
+              nilai.push(santri.nilai[i]);
+            }
+
+            // Buat isi baris
+            // Render semua kolom
+            nilai.forEach((val, idx) => {
+              const td = document.createElement("td");
+              td.textContent = val;
+              row.appendChild(td);
+            });
+
+            // Tombol print di kolom terakhir
+            // Kirim data ke layout_print.html via URL parameter kecuali kolom "NAMA_TENGAH" (idx 8 di nilai array)
+            // Karena nilai[0] = NAMA utama, nilai[8] = NAMA_TENGAH, kita skip index 8
+            const printBtn = document.createElement("button");
+            printBtn.textContent = "PRINT";
+            printBtn.className = "btn-print";
+            printBtn.onclick = function () {
+              const params = new URLSearchParams();
+
+              // Kirim nama utama (index 0)
+              params.append("NAMA", nilai[0]);
+
+              // Kirim semua kecuali NAMA_TENGAH (index 8)
+              for (let i = 1; i < nilai.length; i++) {
+                if (i === 7) continue; // skip kolom NAMA_TENGAH
+                params.append(kolomHeader[i], nilai[i]);
+              }
+
+              // Buka layout_print.html dengan parameter
+              window.open("print_layout.html?" + params.toString(), "_blank");
+            };
+
+            const tdAksi = document.createElement("td");
+            tdAksi.appendChild(printBtn);
+            row.appendChild(tdAksi);
+
+            body.appendChild(row);
+          });
+        })
+        .catch(e => alert("Gagal memuat data sheet: " + e));
+    });
+  </script>
 </body>
 </html>
