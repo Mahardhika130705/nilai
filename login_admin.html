@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Admin</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #e4e4e4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 60px;
+      font-size: 40px;
+      color: #0a0f20;
+    }
+
+    p {
+      color: #0a0f20;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .login-container {
+      background-color: #0a0f20;
+      padding: 30px;
+      border-radius: 20px;
+      margin-top: 40px;
+      width: 400px;
+      max-width: 90%;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 15px;
+    }
+
+    .input-group i {
+      margin-right: 10px;
+      color: #0a0f20;
+    }
+
+    .input-group input {
+      border: none;
+      outline: none;
+      font-size: 16px;
+      flex: 1;
+      background-color: transparent;
+    }
+
+    .btn-login {
+      background-color: #3957d6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      margin-top: 10px;
+    }
+
+    .home-link {
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #0a0f20;
+      text-decoration: none;
+    }
+
+    .home-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Tombol HOME -->
+  <a href="index.html" class="home-link">&gt; HOME</a>
+
+  <!-- Judul dan Deskripsi -->
+  <h1>LOGIN ADMIN</h1>
+  <p>Selamat datang di laman login admin, sebelum anda masuk<br>
+     silahkan masukkan username dan password untuk lanjut ke laman selanjutnya</p>
+
+  <!-- Form Login -->
+  <div class="login-container">
+    <div class="input-group">
+      <i>👤</i>
+      <input type="text" id="username" placeholder="Username">
+    </div>
+    <div class="input-group">
+      <i>🔒</i>
+      <input type="password" id="password" placeholder="Password">
+    </div>
+    <button class="btn-login" onclick="login()">Masuk</button>
+  </div>
+
+  <!-- Script Login -->
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "pondokminggirsari" && password === "1234") {
+        alert("Selamat Datang di Database Input Nilai Santri");
+        window.location.href = "data_input_nilai.html";
+      } else {
+        alert("Username atau Password salah!");
+      }
+    }
+  </script>
+</body>
+</html>
