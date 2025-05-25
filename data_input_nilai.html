@@ -1,205 +1,108 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Data Nilai Santri</title>
+  <meta charset="UTF-8">
+  <title>Data Raport Santri</title>
   <style>
-    body {
-      background: #0d0f1f;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    select {
-      padding: 10px;
-      font-size: 16px;
-      background: #1a1c30;
-      color: white;
-      border-radius: 8px;
-      border: none;
-    }
-    table {
-      margin-top: 20px;
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #fff;
-      color: #000;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-    th {
-      background-color: #1a1c30;
-      color: white;
-    }
-    .btn-print {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 4px;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-    .btn-print:hover {
-      background-color: #0056b3;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    select, button { padding: 5px 10px; font-size: 16px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f0f0f0; }
+    button.print-btn { background-color: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+    button.print-btn:hover { background-color: #45a049; }
   </style>
 </head>
 <body>
 
-  <h2>Data Nilai Santri</h2>
-  <label for="kelasDropdown">Pilih Kelas:</label>
-  <select id="kelasDropdown">
-    <option value="">-- Pilih --</option>
+  <h2>📊 Data Raport Santri</h2>
+  <label for="sheetSelector">Pilih Kelas:</label>
+  <select id="sheetSelector" onchange="loadSheetData(this.value)">
+    <option value="">-- Pilih Sheet --</option>
   </select>
 
-  <table id="tabelNilai">
-    <thead id="tabelHeader"></thead>
-    <tbody id="tabelBody"></tbody>
-  </table>
+  <div id="data" style="margin-top: 20px;">Silakan pilih sheet untuk menampilkan data.</div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxDjPfncS17G14sSSNCIaJ760zhsrU91-aOZPMhRpj61i7LppyvMLg60JMwkByVsXjXvA/exec";
+    const baseURL = "https://script.google.com/macros/s/AKfycbytIfQIK2tZCA2U632Fz6YgvVt5kBC5c_YkP9oi0DgotDB_wLCE5nfeu6LbAWHL9nd0cg/exec";
 
-    const kolomHeader = [
-      "NAMA",
-      "NAHWU",
-      "SHOROF",
-      "FIQIH",
-      "TAUHID",
-      "AMTSILAH_TASHRIFIYYAH",
-      "MENGI'ROB",
-      "NAMA_TENGAH",
-      "TAKROR_NAHWU",
-      "TAKROR_SHOROF",
-      "SOROGAN",
-      "TAFTIS_NAHWU",
-      "TAFTIS_SHOROF",
-      "TAFTIS_FIQIH",
-      "TAFTIS_TAUHID",
-      "TAFTIS_AKHLAK",
-      "IZIN",
-      "ALFA",
-      "SAKIT",
-      "NAMA_MUSTAHIQ"
-    ];
+    async function fetchSheets() {
+      try {
+        const response = await fetch(`${baseURL}?tipe=daftarSheet`);
+        const sheets = await response.json();
+        const selector = document.getElementById("sheetSelector");
 
-    // Load daftar sheet ke dropdown
-    fetch(`${API_URL}?tipe=daftarSheet`)
-      .then(res => res.json())
-      .then(sheets => {
-        const dropdown = document.getElementById("kelasDropdown");
         sheets.forEach(sheet => {
-          const opt = document.createElement("option");
-          opt.value = sheet;
-          opt.textContent = sheet;
-          dropdown.appendChild(opt);
+          const option = document.createElement("option");
+          option.value = sheet;
+          option.textContent = sheet;
+          selector.appendChild(option);
         });
-      }).catch(e => alert("Gagal memuat daftar sheet: " + e));
-
-    // Fungsi membuat header tabel
-    function buatHeader() {
-      const headerRow = document.createElement("tr");
-      kolomHeader.forEach(hdr => {
-        // Ubah "NAMA_TENGAH" agar header tetap "NAMA"
-        const teksHeader = hdr === "NAMA_TENGAH" ? "NAMA" : hdr;
-        const th = document.createElement("th");
-        th.textContent = teksHeader;
-        headerRow.appendChild(th);
-      });
-      // Tambah header kolom aksi PRINT
-      const thAksi = document.createElement("th");
-      thAksi.textContent = "AKSI";
-      headerRow.appendChild(thAksi);
-      return headerRow;
+      } catch (error) {
+        document.getElementById("data").innerHTML = "<i>Gagal memuat daftar sheet.</i>";
+        console.error(error);
+      }
     }
 
-    // Event saat pilih sheet
-    document.getElementById("kelasDropdown").addEventListener("change", function () {
-      const sheet = this.value;
-      if (!sheet) return;
+    async function loadSheetData(sheetName) {
+      if (!sheetName) return;
 
-      fetch(`${API_URL}?tipe=dataSheet&sheet=${encodeURIComponent(sheet)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            alert(data.error);
-            return;
-          }
+      document.getElementById("data").innerHTML = "⏳ Memuat data...";
+      try {
+        const response = await fetch(`${baseURL}?tipe=dataSheet&sheet=${encodeURIComponent(sheetName)}`);
+        const json = await response.json();
 
-          const header = document.getElementById("tabelHeader");
-          const body = document.getElementById("tabelBody");
+        const header = json.header || []; // header dari baris pertama sheet
+        const data = json.data || [];
 
-          header.innerHTML = "";
-          body.innerHTML = "";
+        if (header.length < 2) {
+          document.getElementById("data").innerHTML = "<i>Header mapel tidak ditemukan di kolom pertama tabel.</i>";
+          return;
+        }
 
-          // Buat header tabel
-          header.appendChild(buatHeader());
+        if (data.length === 0) {
+          document.getElementById("data").innerHTML = "<i>Data kosong.</i>";
+          return;
+        }
 
-          // Render tiap baris data
-          data.forEach(santri => {
-            const row = document.createElement("tr");
+        // Buat tabel header
+        let html = "<table><thead><tr><th>Nama</th>";
+        header.slice(1).forEach(h => html += `<th>${h || "-"}</th>`);
+        html += "<th>Aksi</th></tr></thead><tbody>";
 
-            // Siapkan array nilai yang disusun sesuai kolomHeader
-            // Kolom "NAMA_TENGAH" di data diabaikan, asumsikan di data index 7 adalah "NAMA" tengah
-            // Tetapi kita tetap tampilkan karena kolomHeader ada 20 kolom
-            // Namun untuk print, abaikan kolom "NAMA_TENGAH" (index 7)
-            const nilai = [];
+        // Baris data
+        data.forEach(row => {
+          const nama = row.nama || "";
+          const nilaiList = row.nilai || [];
 
-            // Kolom 0 = NAMA utama
-            nilai.push(santri.nama);
-
-            // Berikutnya adalah nilai sesuai kolomHeader dari data.nilai (panjang 19 kolom)
-            // Asumsi data.nilai array sesuai urutan header dari indeks 1 sampai 19
-            // total 19 kolom nilai per santri (NAMA_TENGAH juga termasuk di posisi ke 7)
-            for (let i = 0; i < santri.nilai.length; i++) {
-              nilai.push(santri.nilai[i]);
-            }
-
-            // Buat isi baris
-            // Render semua kolom
-            nilai.forEach((val, idx) => {
-              const td = document.createElement("td");
-              td.textContent = val;
-              row.appendChild(td);
-            });
-
-            // Tombol print di kolom terakhir
-            // Kirim data ke layout_print.html via URL parameter kecuali kolom "NAMA_TENGAH" (idx 7 di nilai array)
-            // Karena nilai[0] = NAMA utama, nilai[7] = NAMA_TENGAH, kita skip index 7
-            const printBtn = document.createElement("button");
-            printBtn.textContent = "PRINT";
-            printBtn.className = "btn-print";
-            printBtn.onclick = function () {
-              const params = new URLSearchParams();
-
-              // Kirim nama utama (index 0)
-              params.append("NAMA", nilai[0]);
-
-              // Kirim semua kecuali NAMA_TENGAH (index 7)
-              for (let i = 1; i < nilai.length; i++) {
-                if (i === 7) continue; // skip kolom NAMA_TENGAH
-                params.append(kolomHeader[i], nilai[i]);
-              }
-
-              // Tambah kirim KELAS dari dropdown
-              params.append("KELAS", document.getElementById("kelasDropdown").value);
-
-              // Buka layout_print.html dengan parameter
-              window.open("print_layout.html?" + params.toString(), "_blank");
-            };
-
-            const tdAksi = document.createElement("td");
-            tdAksi.appendChild(printBtn);
-            row.appendChild(tdAksi);
-
-            body.appendChild(row);
+          html += `<tr><td>${nama}</td>`;
+          nilaiList.forEach(nilai => {
+            html += `<td>${nilai === "" ? "" : nilai}</td>`;
           });
-        })
-        .catch(e => alert("Gagal memuat data sheet: " + e));
-    });
+
+          // Buat parameter URL berdasarkan header dan nilai
+          const params = new URLSearchParams();
+          params.append("NAMA_MUSTAHIQ", nama);
+          params.append("KELAS", sheetName);
+          nilaiList.forEach((n, i) => {
+            const key = header[i + 1] || `NILAI${i + 1}`;
+            params.append(key, n || "");
+          });
+
+          html += `<td><button class="print-btn" onclick="window.open('print_layout.html?${params.toString()}', '_blank')">PRINT</button></td></tr>`;
+        });
+
+        html += "</tbody></table>";
+        document.getElementById("data").innerHTML = html;
+
+      } catch (error) {
+        document.getElementById("data").innerHTML = "<i>Gagal memuat data sheet.</i>";
+        console.error(error);
+      }
+    }
+
+    fetchSheets();
   </script>
+
 </body>
 </html>
