@@ -1,42 +1,270 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Data Nilai Santri</title>
+  <meta charset="UTF-8" />
+  <title>كشف الدرجات</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
+    @font-face {
+      font-family: 'DecoType Thuluth';
+      src: url('DecoType-Thuluth.ttf') format('truetype');
     }
-    h1 {
-      color: #333;
+    @font-face {
+      font-family: 'DecoType Thuluth II';
+      src: url('DecoType-Thuluth-II.ttf') format('truetype');
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
+    @page { size: A4 portrait; margin: 0; }
+    html, body {
+      margin: 0; padding: 0;
+      width: 210mm; height: 297mm;
+      font-family: 'Arial', sans-serif;
+      background: white;
     }
-    li {
-      margin-bottom: 8px;
-      font-size: 16px;
+    .page {
+      width: 190mm;
+      height: 277mm;
+      margin: auto;
+      padding: 10mm;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
-    span {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .header img {
+      width: 70px;
+      height: auto;
+    }
+    .header-text {
+      flex: 1;
+      text-align: center;
+      margin-right: 20px;
+    }
+    .header-text h1 {
+      font-size: 28pt;
+      font-family: 'DecoType Thuluth II', serif;
+      font-weight: normal;
+      margin: 0;
+      line-height: 1.1;
+    }
+    .header-text h2 {
+      font-size: 18pt;
+      font-family: 'DecoType Thuluth', serif;
+      font-weight: normal;
+      margin: 0;
+      line-height: 1.1;
+    }
+    .separator {
+      border-top: 1px solid black;
+      margin: 5px 0 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11pt;
+      margin-top: 5px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 4px;
+      text-align: center;
+    }
+    th { background-color: #e0f0ff; }
+    .section-header {
+      background-color: #cde6fa;
       font-weight: bold;
+      text-align: right;
+    }
+    .info-row td {
+      border: none;
+      font-weight: bold;
+      text-align: right;
+      padding: 4px 0;
+    }
+    .footer {
+      font-size: 10pt;
+      margin-top: auto;
+      margin-bottom: 10px;
+    }
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    .signatures div {
+      width: 30%;
+      text-align: center;
+    }
+    .signatures div p {
+      margin-top: 50px;
+    }
+    .button-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    button {
+      font-size: 12pt;  /* diperkecil dari 14pt */
+      padding: 6px 12px; /* diperkecil dari 8px 15px */
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    /* Sembunyikan tombol saat print */
+    @media print {
+      .button-container {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Data Nilai Santri</h1>
-  <ul id="dataList"></ul>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const list = document.getElementById('dataList');
+<div class="page">
+  <!-- Header -->
+  <div class="header">
+    <img src="logo.png" alt="Logo" />
+    <div class="header-text">
+      <h1>كشف الدرجات</h1>
+      <h2>المدرسة الدينية روضة المتعلمين</h2>
+    </div>
+  </div>
+  <div class="separator"></div>
 
-    for (const [key, value] of params.entries()) {
-      const li = document.createElement("li");
-      li.innerHTML = `<span>${key.toUpperCase()}:</span> ${value}`;
-      list.appendChild(li);
-    }
-  </script>
+  <!-- Table -->
+  <table>
+    <tr class="info-row">
+      <td colspan="3">الفصل : <span id="kelas"></span></td>
+      <td colspan="3">إسم الطالب / ة : <span id="nama"></span></td>
+    </tr>
+    <tr>
+      <th>رقم</th>
+      <th>مادة الدروس</th>
+      <th>النهاية الصغرى</th>
+      <th>النمرة</th>
+      <th>الحروف</th>
+      <th>التقدير</th>
+    </tr>
+
+    <!-- Isi baris nilai -->
+    <tbody id="nilai-table"></tbody>
+
+    <tr class="section-header"><td colspan="6">أيام الغياب</td></tr>
+    <tr><td colspan="3">المرض</td><td colspan="3" id="sakit"></td></tr>
+    <tr><td colspan="3">الاستئذان</td><td colspan="3" id="izin"></td></tr>
+    <tr><td colspan="3">بغير عذر</td><td colspan="3" id="alfa"></td></tr>
+  </table>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>
+      تحريراً بالمدرسة الدينية روضة المتعلمين، منجرساري في ........ ربيع الأول ١٤٤٦ هـ / ........ يوليو ٢٠٢٥ م
+    </p>
+
+    <div class="signatures">
+      <div>
+        <strong>ولي الأمر</strong>
+        <p>.................................</p>
+      </div>
+      <div>
+        <strong>ولي الفصل</strong>
+        <p id="nama-bawah">.................................</p>
+      </div>
+      <div>
+        <strong>رئيس المدرسة</strong>
+        <p>Agus M. Faiz Chariri</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tombol Print & Save PDF -->
+  <div class="button-container">
+    <button onclick="window.print()">طباعة</button>
+    <button onclick="saveAsPDF()">حفظ كـ PDF</button>
+  </div>
+</div>
+
+<script>
+  // Fungsi konversi angka Latin ke angka Arab-Indic
+  function toArabicNumber(num) {
+    const arabicNumbers = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return num.toString().split('').map(d => arabicNumbers[d] || d).join('');
+  }
+
+  // Fungsi konversi angka ke huruf Arab (pembilang)
+  function angkaKeArab(n) {
+    const satuan = ["", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة"];
+    const belasan = ["", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"];
+    const puluhan = ["", "عشرة", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"];
+    if (n <= 10) return puluhan[Math.floor(n / 10)] || satuan[n];
+    if (n < 20) return belasan[n - 10];
+    let p = Math.floor(n / 10), s = n % 10;
+    return s === 0 ? puluhan[p] : satuan[s] + " و" + puluhan[p];
+  }
+
+  // Ambil parameter URL
+  const params = new URLSearchParams(window.location.search);
+
+  const nama = params.get("NAMA") || "";
+  const namaMustahiq = params.get("NAMA_MUSTAHIQ") || "";
+  const kelas = params.get("KELAS") || "";
+
+  document.getElementById("nama").textContent = nama;
+  document.getElementById("kelas").textContent = kelas;
+  document.getElementById("nama-bawah").textContent = namaMustahiq;
+
+  const tableBody = document.getElementById("nilai-table");
+
+  // Nama mapel sesuai yang ada di data_input_nilai.html
+  const mapelList = [
+    "NAHWU", "SHOROF", "FIQIH", "TAUHID", "AMTSILAH_TASHRIFIYYAH", "MENGI'ROB",
+    "TAKROR_NAHWU", "TAKROR_SHOROF", "SOROGAN",
+    "TAFTIS_NAHWU", "TAFTIS_SHOROF", "TAFTIS_FIQIH", "TAFTIS_TAUHID", "TAFTIS_AKHLAK"
+  ];
+
+  // Nama mapel untuk kolom مادة الدروس (dalam bahasa Arab atau kamu bisa ganti)
+  const namaMapelArab = [
+    "النحو", "الصرف", "الفقه", "التوحيد", "أمثلة صرفية", "الإعراب",
+    "تكرار النحو", "تكرار الصرف", "صوغان",
+    "تفتيس النحو", "تفتيس الصرف", "تفتيس الفقه", "تفتيس التوحيد", "تفتيس الأخلاق"
+  ];
+
+  mapelList.forEach((key, i) => {
+    const nilai = parseInt(params.get(key)) || 0;
+    const huruf = angkaKeArab(nilai);
+    let predikat = "";
+    if (nilai <= 74) predikat = "ناقص";
+    else if (nilai <= 85) predikat = "جيد";
+    else predikat = "جيد جدا";
+
+    const nomorArab = toArabicNumber(i + 1);
+    const nilaiArab = toArabicNumber(nilai);
+
+    const row = `
+      <tr>
+        <td>${nomorArab}</td>
+        <td>${namaMapelArab[i]}</td>
+        <td>٦٥</td>
+        <td>${nilaiArab}</td>
+        <td>${huruf}</td>
+        <td>${predikat}</td>
+      </tr>`;
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
+
+  // Isi izin, sakit, alfa dengan angka Arab-Indic
+  document.getElementById("sakit").textContent = toArabicNumber(params.get("SAKIT") || "0");
+  document.getElementById("izin").textContent = toArabicNumber(params.get("IZIN") || "0");
+  document.getElementById("alfa").textContent = toArabicNumber(params.get("ALFA") || "0");
+
+  // Fungsi simpan PDF (pakai print fallback)
+  function saveAsPDF() {
+    alert('Gunakan fitur Print browser untuk menyimpan ke PDF.');
+    window.print();
+  }
+</script>
+
 </body>
 </html>

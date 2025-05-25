@@ -167,8 +167,8 @@
             });
 
             // Tombol print di kolom terakhir
-            // Kirim data ke layout_print.html via URL parameter kecuali kolom "NAMA_TENGAH" (idx 8 di nilai array)
-            // Karena nilai[0] = NAMA utama, nilai[8] = NAMA_TENGAH, kita skip index 8
+            // Kirim data ke layout_print.html via URL parameter kecuali kolom "NAMA_TENGAH" (idx 7 di nilai array)
+            // Karena nilai[0] = NAMA utama, nilai[7] = NAMA_TENGAH, kita skip index 7
             const printBtn = document.createElement("button");
             printBtn.textContent = "PRINT";
             printBtn.className = "btn-print";
@@ -178,11 +178,14 @@
               // Kirim nama utama (index 0)
               params.append("NAMA", nilai[0]);
 
-              // Kirim semua kecuali NAMA_TENGAH (index 8)
+              // Kirim semua kecuali NAMA_TENGAH (index 7)
               for (let i = 1; i < nilai.length; i++) {
                 if (i === 7) continue; // skip kolom NAMA_TENGAH
                 params.append(kolomHeader[i], nilai[i]);
               }
+
+              // Tambah kirim KELAS dari dropdown
+              params.append("KELAS", document.getElementById("kelasDropdown").value);
 
               // Buka layout_print.html dengan parameter
               window.open("print_layout.html?" + params.toString(), "_blank");
