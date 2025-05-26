@@ -2,26 +2,109 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Data Raport Santri</title>
+  <title>Data Nilai Santri</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    select, button { padding: 5px 10px; font-size: 16px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background-color: #f0f0f0; }
-    button.print-btn { background-color: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-    button.print-btn:hover { background-color: #45a049; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #fff;
+      color: #000;
+    }
+    h2 {
+      background-color: #0b0f28;
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    #sheetSelector {
+      background-color: #0b0f28;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 10px;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: calc(100% - 10px);
+      background-position-y: center;
+      padding-right: 40px;
+    }
+    .link-button {
+      background-color: #0b0f28;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .link-button:hover {
+      background-color: #1c2542;
+    }
+    .red-button {
+      background-color: #c62828 !important;
+    }
+    table {
+      width: 95%;
+      border-collapse: collapse;
+      margin: 0 auto 40px auto;
+    }
+    th {
+      background-color: #0b0f28;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+    td {
+      background-color: #ffffff;
+      padding: 10px;
+      text-align: center;
+      border: 4px solid white;
+    }
+    button.print-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    button.print-btn:hover {
+      background-color: #388e3c;
+    }
+    #data {
+      text-align: center;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
 
-  <h2>📊 Data Raport Santri</h2>
-  <label for="sheetSelector">Pilih Kelas:</label>
-  <select id="sheetSelector" onchange="loadSheetData(this.value)">
-    <option value="">-- Pilih Sheet --</option>
-  </select>
+  <h2>DATA NILAI SANTRI</h2>
 
-  <div id="data" style="margin-top: 20px;">Silakan pilih sheet untuk menampilkan data.</div>
+  <div class="top-bar">
+    <select id="sheetSelector" onchange="loadSheetData(this.value)">
+      <option value="">Kelas</option>
+    </select>
+    <a class="link-button" href="https://docs.google.com/spreadsheets/d/1CVz411Z7fjq73d7-tmDH0T97s09PWm1VRSTSiGsTQVo/edit?usp=sharing" target="_blank">BLANKO TULIS</a>
+    <a class="link-button" href="https://docs.google.com/spreadsheets/d/1Y1GBFSFMYCfn16dLa28B-GOo4TgOdb3W-7bItGOFsq4/edit?usp=sharing" target="_blank">BLANKO LISAN</a>
+    <a class="link-button" href="https://docs.google.com/spreadsheets/d/1Io17cbW_sQIH6qxnQOgUHGL6wCZ96qutzaRt4su_7Fc/edit?usp=sharing" target="_blank">BLANKO TSTK</a>
+    <a class="link-button red-button" href="https://docs.google.com/spreadsheets/d/1ZUHETjYdZIv0fwdgl_3fHlu2QI9YPy__0NlW3qBc8vY/edit?usp=sharing" target="_blank">BLANKO NILAI AKHIR</a>
+  </div>
+
+  <div id="data">Silakan pilih sheet untuk menampilkan data.</div>
 
   <script>
     const baseURL = "https://script.google.com/macros/s/AKfycbytIfQIK2tZCA2U632Fz6YgvVt5kBC5c_YkP9oi0DgotDB_wLCE5nfeu6LbAWHL9nd0cg/exec";
@@ -46,17 +129,17 @@
 
     async function loadSheetData(sheetName) {
       if (!sheetName) return;
-
       document.getElementById("data").innerHTML = "⏳ Memuat data...";
+
       try {
         const response = await fetch(`${baseURL}?tipe=dataSheet&sheet=${encodeURIComponent(sheetName)}`);
         const json = await response.json();
 
-        const header = json.header || []; // header dari baris pertama sheet
+        const header = json.header || [];
         const data = json.data || [];
 
         if (header.length < 2) {
-          document.getElementById("data").innerHTML = "<i>Header mapel tidak ditemukan di kolom pertama tabel.</i>";
+          document.getElementById("data").innerHTML = "<i>Header mapel tidak ditemukan.</i>";
           return;
         }
 
@@ -65,12 +148,10 @@
           return;
         }
 
-        // Buat tabel header
-        let html = "<table><thead><tr><th>Nama</th>";
+        let html = "<table><thead><tr><th>NAMA</th>";
         header.slice(1).forEach(h => html += `<th>${h || "-"}</th>`);
-        html += "<th>Aksi</th></tr></thead><tbody>";
+        html += "<th></th></tr></thead><tbody>";
 
-        // Baris data
         data.forEach(row => {
           const nama = row.nama || "";
           const nilaiList = row.nilai || [];
@@ -80,7 +161,6 @@
             html += `<td>${nilai === "" ? "" : nilai}</td>`;
           });
 
-          // Buat parameter URL berdasarkan header dan nilai
           const params = new URLSearchParams();
           params.append("NAMA_MUSTAHIQ", nama);
           params.append("KELAS", sheetName);
@@ -103,6 +183,5 @@
 
     fetchSheets();
   </script>
-
 </body>
 </html>

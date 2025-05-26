@@ -51,7 +51,6 @@
   <label for="kelas">Pilih Kelas</label>
   <select name="kelas" id="kelas" required>
     <option value="">-- Pilih Kelas --</option>
-    <!-- 1 ULLA A sampai H -->
     <option value="1_ULLA_A">1 ULLA A</option>
     <option value="1_ULLA_B">1 ULLA B</option>
     <option value="1_ULLA_C">1 ULLA C</option>
@@ -60,7 +59,6 @@
     <option value="1_ULLA_F">1 ULLA F</option>
     <option value="1_ULLA_G">1 ULLA G</option>
     <option value="1_ULLA_H">1 ULLA H</option>
-    <!-- 2 ULLA A sampai H -->
     <option value="2_ULLA_A">2 ULLA A</option>
     <option value="2_ULLA_B">2 ULLA B</option>
     <option value="2_ULLA_C">2 ULLA C</option>
@@ -69,7 +67,6 @@
     <option value="2_ULLA_F">2 ULLA F</option>
     <option value="2_ULLA_G">2 ULLA G</option>
     <option value="2_ULLA_H">2 ULLA H</option>
-    <!-- 3 ULLA A sampai H -->
     <option value="3_ULLA_A">3 ULLA A</option>
     <option value="3_ULLA_B">3 ULLA B</option>
     <option value="3_ULLA_C">3 ULLA C</option>
@@ -78,15 +75,12 @@
     <option value="3_ULLA_F">3 ULLA F</option>
     <option value="3_ULLA_G">3 ULLA G</option>
     <option value="3_ULLA_H">3 ULLA H</option>
-    <!-- 1 WUSTHO A sampai D -->
     <option value="1_WUSTHO_A">1 WUSTHO A</option>
     <option value="1_WUSTHO_B">1 WUSTHO B</option>
     <option value="1_WUSTHO_C">1 WUSTHO C</option>
     <option value="1_WUSTHO_D">1 WUSTHO D</option>
-    <!-- 2 WUSTHO PA, PI -->
     <option value="2_WUSTHO_PA">2 WUSTHO PA</option>
     <option value="2_WUSTHO_PI">2 WUSTHO PI</option>
-    <!-- 3 WUSTHO PA, PI -->
     <option value="3_WUSTHO_PA">3 WUSTHO PA</option>
     <option value="3_WUSTHO_PI">3 WUSTHO PI</option>
   </select>
@@ -116,24 +110,34 @@
 </form>
 
 <script>
+  // Tampilkan notifikasi keterangan saat halaman dimuat
+  window.addEventListener('DOMContentLoaded', () => {
+    alert(`KETERANGAN:\n
+1 ULLA : MAPEL 1 = NAHWU, MAPEL 2 = SHOROF, MAPEL 3 = FIQIH, MAPEL 4 = TAUHID, MAPEL 5 = AMTSILAH TASRIFIYYAH, MAPEL 6 = MENGI'ROB\n
+2 ULLA : MAPEL 1 = NAHWU, MAPEL 2 = SHOROF, MAPEL 3 = FIQIH, MAPEL 4 = TAUHID, MAPEL 5 = MENGULANG NAHWU SHOROF, MAPEL 6 = MENGI'ROB\n
+3 ULLA : MAPEL 1 = NAHWU, MAPEL 2 = FIQIH, MAPEL 3 = TAUHID, MAPEL 4 = MENGULANG NAHWU, MAPEL 5 = MENGULANG SHOROF, MAPEL 6 = MENGI'ROB\n
+1 WUSTHO : MAPEL 1 = NAHWU, MAPEL 2 = FIQIH, MAPEL 3 = TAUHID, MAPEL 4 = MENGULANG NAHWU, MAPEL 5 = MENGULANG SHOROF, MAPEL 6 = MENGI'ROB\n
+2 WUSTHO : MAPEL 1 = NAHWU, MAPEL 2 = FIQIH, MAPEL 3 = TAUHID, MAPEL 4 = MENGULANG NAHWU, MAPEL 5 = MENGULANG SHOROF, MAPEL 6 = MENGI'ROB\n
+3 WUSTHO : MAPEL 1 = BALAGHAH, MAPEL 2 = MANTIQ, MAPEL 3 = FIQIH, MAPEL 4 = QOIDAH FIQIH, MAPEL 5 = HADIS, MAPEL 6 = TAUHID`);
+  });
+
   const form = document.getElementById('nilaiForm');
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbybB7M1qSInaM-d85inbYPztRoVHD57XVto7aSiKDXQ5gFDeVtNx4CU9rc3XUeHMsKg/exec'; // Ganti dengan URL Web App Anda
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbybB7M1qSInaM-d85inbYPztRoVHD57XVto7aSiKDXQ5gFDeVtNx4CU9rc3XUeHMsKg/exec';
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-
     fetch(scriptURL, {
       method: 'POST',
       body: new URLSearchParams(new FormData(form))
     })
-      .then(response => response.text())
-      .then(text => {
-        alert(text);
-        if(text.toLowerCase().includes("sukses")) {
-          form.reset();
-        }
-      })
-      .catch(error => alert('Error: ' + error.message));
+    .then(response => response.text())
+    .then(text => {
+      alert(text);
+      if (text.toLowerCase().includes("sukses")) {
+        form.reset();
+      }
+    })
+    .catch(error => alert('Error: ' + error.message));
   });
 </script>
 

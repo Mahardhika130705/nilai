@@ -5,6 +5,14 @@
   <title>Selamat Datang - Madin Roudlotul Muta'alimin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @font-face {
+      font-family: 'DecoTypeThuluth';
+      src: url('DecoType-Thuluth-II.woff2') format('woff2'),
+           url('DecoType-Thuluth-II.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -12,6 +20,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
     }
 
     .container {
@@ -20,34 +29,86 @@
       min-height: 100vh;
     }
 
-    /* === LINK ADMIN POJOK KIRI ATAS (SELALU DI ATAS) === */
-    .admin-link {
+    /* === HAMBURGER MENU === */
+    .menu-toggle {
       position: fixed;
-      top: 12px;
+      top: 16px;
       left: 16px;
-      font-weight: bold;
-      font-size: 14px;
-      z-index: 999;
+      width: 30px;
+      height: 25px;
+      cursor: pointer;
+      z-index: 1001;
     }
 
-    .admin-link a {
-      color: #100057; /* Biru terang (Tailwind-like) */
+    .menu-toggle span {
+      display: block;
+      height: 4px;
+      background: #000;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.822);
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 14px 24px;
       text-decoration: none;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .admin-link a:hover {
-      text-decoration: underline;
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     .top {
+      position: relative;
       flex: 1;
-      background-color: #f0f0f0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 20px;
+      animation: fadeInTop 1.2s ease-out;
+      background: url("background.jpg") no-repeat center center;
+      background-size: cover;
+    }
+
+    .top::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.719);
+      z-index: 0;
+    }
+
+    .top img,
+    .arabic,
+    .arabic-sub {
+      position: relative;
+      z-index: 1;
     }
 
     .top img {
@@ -57,6 +118,7 @@
     }
 
     .arabic {
+      font-family: 'DecoTypeThuluth', serif;
       font-size: 24px;
       margin-bottom: 5px;
     }
@@ -75,42 +137,25 @@
       justify-content: center;
       align-items: center;
       padding: 40px;
+      animation: fadeInBottom 1.5s ease-out;
     }
 
     .bottom h1 {
       font-size: 36px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 0.3s forwards;
     }
 
     .bottom p {
       font-size: 16px;
       line-height: 1.6;
-      max-width: 500px;
+      max-width: 700px;
       text-align: center;
-    }
-
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .buttons a {
-      text-decoration: none;
-      background-color: #e0e0e0;
-      color: #111;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-weight: bold;
-      text-align: center;
-      transition: background-color 0.3s;
-    }
-
-    .buttons a:hover {
-      background-color: #cfcfcf;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 0.6s forwards;
     }
 
     @media (min-width: 769px) {
@@ -122,32 +167,88 @@
         font-size: 20px;
       }
     }
+
+    @keyframes fadeInTop {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInBottom {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
-<body>
+<body onclick="closeSidebar(event)">
 
-  <!-- LINK ADMIN (selalu muncul di pojok kiri atas) -->
-  <div class="admin-link"><a href="login_admin.html">&gt; ADMIN</a></div>
+  <!-- TOMBOL HAMBURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar(event)">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <a href="latar_belakang.html" target="_blank">Latar Belakang</a>
+    <a href="jurnal_ajar.html" target="_blank">Jurnal Ajar</a>
+    <a href="silabus.html" target="_blank">Silabus</a>
+    <a href="input_nilai_tulis.html" target="_blank">Ujian Tulis</a>
+    <a href="input_nilai_lisan.html" target="_blank">Ujian Lisan</a>
+    <a href="nilai_tambahan.html" target="_blank">Nilai Tambahan</a>
+    <a href="login_admin.html" target="_blank">> ADMIN</a>
+  </div>
+
+  <!-- KONTEN -->
   <div class="container">
-    <!-- Bagian atas: Logo dan teks Arab -->
+    <!-- Bagian Atas -->
     <div class="top">
       <img src="logo.png" alt="Logo Pondok">
       <div class="arabic">المدرسة الدينية روضة المتعلمين</div>
       <div class="arabic-sub">منجيِرْسَاري – كانيغار – الباليتاري</div>
     </div>
 
-    <!-- Bagian bawah: Judul dan tombol -->
+    <!-- Bagian Bawah -->
     <div class="bottom">
       <h1>Selamat Datang</h1>
-      <p>di laman resmi Madin Roudlotul Muta’alimin Minggirsari,<br>Silahkan Input Nilai anda pada laman berikut:</p>
-      <div class="buttons">
-        <a href="./input_nilai_tulis.html" target="_blank">Ujian Tulis</a>
-        <a href="./input_nilai_lisan.html" target="_blank">Ujian Lisan</a>
-        <a href="./nilai_tambahan.html" target="_blank">Nilai Tambahan</a>
-      </div>
+      <p>Selamat datang di laman resmi Madrasah Diniyah Roudlotul Muta’alimin. Sebuah lembaga pendidikan Islam yang berkomitmen mencetak generasi berakhlak mulia, berilmu, dan berdaya saing tinggi dalam bingkai nilai-nilai keislaman. Melalui semangat berkhidmah kepada pesantren, kami meyakini bahwa pengabdian adalah kunci keberkahan ilmu, dan dari sanalah lahir pribadi-pribadi yang tangguh, rendah hati, serta siap membimbing umat menuju kebaikan.</p>
     </div>
   </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    function toggleSidebar(event) {
+      event.stopPropagation();
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function closeSidebar(event) {
+      const sidebar = document.getElementById("sidebar");
+      const isClickInside = sidebar.contains(event.target) || event.target.classList.contains("menu-toggle") || event.target.closest(".menu-toggle");
+      if (!isClickInside) {
+        sidebar.classList.remove("open");
+      }
+    }
+  </script>
 
 </body>
 </html>
