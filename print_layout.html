@@ -7,59 +7,74 @@
   <style>
     @page {
       size: A4 portrait;
-      margin: 15mm;
+      margin: 12.7mm 12.7mm 12.7mm 12.7mm; /* Narrow margins - Word standard */
     }
 
     body {
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      font-size: 13pt;
+      font-size: 12pt;
       direction: rtl;
+      line-height: 1.3;
+      background: white;
     }
 
     .container {
-      padding: 20px;
+      padding: 0;
       box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      background: white;
     }
 
     .top-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      margin-bottom: 10px;
+      position: relative;
     }
 
     .logo {
-      height: 75px;
-      margin-left: 10px;
+      height: 60px;
+      position: absolute;
+      right: 0;
+      flex-shrink: 0;
     }
 
     .header-text {
       text-align: center;
-      flex-grow: 1;
-      margin-right: -80px;
+      width: 100%;
+      margin: 0;
     }
 
     .title {
-      font-size: 22pt;
+      font-size: 20pt;
       font-family: 'DecoType Thuluth', serif;
-      margin: 0;
+      margin: 5px 0;
+      font-weight: bold;
     }
 
     .subtitle {
       font-size: 16pt;
       font-family: 'DecoType Thuluth', serif;
-      margin: 0;
+      margin: 5px 0;
+      font-weight: bold;
     }
 
     hr {
       border: 1px solid black;
-      margin: 5px 0;
+      margin: 10px 0;
     }
 
     .info {
       font-size: 14pt;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .info span {
@@ -69,43 +84,79 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12pt;
-      margin-bottom: 10px;
+      font-size: 11pt;
+      margin-bottom: 15px;
     }
 
     th, td {
       border: 1px solid black;
       padding: 4px;
       text-align: center;
+      vertical-align: middle;
     }
 
     th {
       background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .subject-header {
+      background-color: #e0e0e0;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    .category-header {
+      background-color: #e0e0e0;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    .absence-header {
+      background-color: #f0f0f0;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    .subject-row {
+      background-color: #f8f8f8;
+    }
+
+    .absence-section {
+      background-color: #f0f0f0;
+    }
+
+    .red-score {
+      color: red;
+      font-weight: bold;
     }
 
     .footer-note {
-      font-size: 13pt;
+      font-size: 12pt;
       text-align: right;
-      margin-top: 10px;
-      margin-right: 0;
+      margin: 20px 0;
       white-space: pre-wrap;
+      line-height: 1.5;
     }
 
     .ttd {
       display: flex;
       justify-content: space-between;
-      margin-top: 20px;
-      font-size: 13pt;
+      margin-top: 30px;
+      font-size: 12pt;
+      page-break-inside: avoid;
     }
 
     .ttd div {
-      width: 32%;
+      width: 30%;
       text-align: center;
     }
 
     .ttd span {
       display: block;
-      margin-top: 40mm;
+      margin-top: 40px;
       font-weight: bold;
     }
 
@@ -113,24 +164,46 @@
       display: flex;
       justify-content: center;
       gap: 20px;
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     button {
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 14px;
       cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+    }
+
+    button:hover {
+      background-color: #e9ecef;
     }
 
     @media print {
       .buttons {
         display: none !important;
       }
+      
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    /* Pastikan semua elemen masuk dalam satu halaman */
+    .print-content {
+      page-break-inside: avoid;
     }
   </style>
 </head>
 <body>
-  <div id="printArea" class="container">
+  <div id="printArea" class="container print-content">
     <!-- HEADER -->
     <div class="top-bar">
       <img src="logo.png" class="logo" alt="Logo">
@@ -144,33 +217,36 @@
 
     <!-- INFO -->
     <div class="info">
-      الفصل: <span id="kelas"></span> | إسم الطالب / ة: <span id="nama"></span>
+      <div>الفصل: <span id="kelas"></span></div>
+      <div>إسم الطالب / ة: <span id="nama"></span></div>
     </div>
 
     <!-- TABLE -->
     <table>
       <thead>
         <tr>
-          <th>رقم</th>
-          <th>مادة الدروس</th>
-          <th>النمرة</th>
+          <th rowspan="2">رقم</th>
+          <th rowspan="2">مادة الدروس</th>
+          <th colspan="2">النهاية</th>
+          <th rowspan="2">النتيجة</th>
+          <th rowspan="2">التقدير</th>
+        </tr>
+        <tr>
+          <th>الصغرى</th>
           <th>الحروف</th>
-          <th>التقدير</th>
         </tr>
       </thead>
       <tbody id="nilai-body"></tbody>
     </table>
 
     <!-- FOOTER NOTE -->
-    <div class="footer-note">
-تحريرا بالمدرسة هداية المتعلمين منجرساري فى .....,................,........م / .......,.................,..........ه
-    </div>
+    <div class="footer-note">تحريرا بالمدرسة هداية المتعلمين منجرساري فى .....,................,........م / .......,.................,..........ه</div>
 
     <!-- SIGNATURES -->
     <div class="ttd">
       <div>
         رئيس المدرسة
-        <span>AGUS. M. FAIZ CHARIRI</span>
+        <span>Agus. MUHAMMAD FAIZ CHARIRI</span>
       </div>
       <div>
         ولي الفصل
@@ -192,17 +268,36 @@
   <!-- SCRIPT -->
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    let nama = "", namaMustahiq = "", no = 1;
+    let nama = "", waliKelas = "", kelas = "";
 
-    for (const [key, value] of urlParams.entries()) {
-      const upperKey = key.toUpperCase();
-      if (upperKey === "NAMA") nama = value;
-      if (upperKey === "NAMA_MUSTAHIQ") namaMustahiq = value;
+    // Ambil data dasar dari URL
+    nama = urlParams.get("NAMA") || urlParams.get("nama") || "";
+    kelas = urlParams.get("KELAS") || urlParams.get("kelas") || "";
+    
+    // Ambil nama wali kelas dari parameter yang benar
+    // Cari parameter yang berisi nama wali kelas (biasanya parameter terakhir atau yang mengandung nama guru)
+    const allParams = Array.from(urlParams.entries());
+    
+    // Cari parameter wali kelas - bisa dari NAMA_MUSTAHIQ atau parameter lain yang berisi nama guru
+    waliKelas = urlParams.get("NAMA_MUSTAHIQ") || urlParams.get("nama_mustahiq") || "";
+    
+    // Jika NAMA_MUSTAHIQ kosong atau sama dengan nama santri, cari parameter lain yang mungkin berisi nama wali kelas
+    if (!waliKelas || waliKelas === nama) {
+      // Cari parameter yang nilainya bukan angka dan bukan nama santri (kemungkinan nama wali kelas)
+      for (const [key, value] of allParams) {
+        const upperKey = key.toUpperCase();
+        if (!["NAMA", "KELAS", "المرض", "MARAD", "الاستئذان", "ISTIZAN", "بغير عذر", "BIGHOIR_UZR"].includes(upperKey) && 
+            value && value !== nama && isNaN(parseInt(value))) {
+          waliKelas = value;
+          // Ambil parameter terakhir yang memenuhi kriteria (biasanya wali kelas ada di kolom terakhir)
+        }
+      }
     }
 
+    // Set data ke elemen HTML
     document.getElementById("nama").textContent = nama;
-    document.getElementById("kelas").textContent = urlParams.get("KELAS") || "";
-    document.getElementById("wali-fashl").textContent = namaMustahiq;
+    document.getElementById("kelas").textContent = kelas;
+    document.getElementById("wali-fashl").textContent = waliKelas;
 
     function toArabicNumber(num) {
       const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
@@ -233,34 +328,142 @@
     }
 
     const nilaiBody = document.getElementById("nilai-body");
-
+    
+    // Kumpulkan semua parameter nilai (bukan NAMA, NAMA_MUSTAHIQ, KELAS)
+    const allNilaiParams = [];
+    const absenceParams = {};
+    
     for (const [key, val] of urlParams.entries()) {
       const upperKey = key.toUpperCase();
+      
+      // Skip parameter dasar
       if (["NAMA", "NAMA_MUSTAHIQ", "KELAS"].includes(upperKey)) continue;
+      
+      // Cek parameter absensi
+      if (upperKey === "MARAD" || upperKey === "المرض" || key === "المرض") {
+        absenceParams["المرض"] = val;
+      } else if (upperKey === "ISTIZAN" || upperKey === "الاستئذان" || key === "الاستئذان") {
+        absenceParams["الاستئذان"] = val;
+      } else if (upperKey === "BIGHOIR_UZR" || upperKey === "بغير عذر" || key === "بغير عذر") {
+        absenceParams["بغير عذر"] = val;
+      } else {
+        // Parameter nilai mata pelajaran - simpan dengan urutan kemunculan
+        const score = parseInt(val);
+        if (!isNaN(score) && score >= 0 && score <= 100) {
+          allNilaiParams.push({ name: key, score: score });
+        } else if (val !== "" && val !== waliKelas) {
+          // Jika bukan angka tapi ada value dan bukan nama wali kelas, tetap masukkan sebagai mata pelajaran
+          allNilaiParams.push({ name: key, score: 65 }); // default score
+        }
+      }
+    }
+    
+    // Struktur mata pelajaran dengan mapping header yang benar
+    const subjects = [
+      { category: "الدراس الدينية", headerIndices: [0, 1, 2, 3, 4, 5] },  // header 1-6
+      { category: "الدراس تكرار", headerIndices: [6, 7] },                // header 8-9 (index 6-7 karena skip header 7)
+      { category: "الدراس سوروغان", headerIndices: [8] },                 // header 10 (index 8)
+      { category: "تفتيش الكتاب", headerIndices: [9, 10, 11, 12, 13] }    // header 11-15 (index 9-13)
+    ];
 
-      const score = parseInt(val);
-      if (isNaN(score) || score < 0 || score > 100) continue;
+    let currentNo = 1;
+    
+    // Generate table untuk mata pelajaran
+    subjects.forEach((subject) => {
+      // Header kategori
+      const headerRow = document.createElement("tr");
+      headerRow.innerHTML = `
+        <td class="subject-header">${toArabicNumber(currentNo)}</td>
+        <td colspan="5" class="category-header">${subject.category}</td>
+      `;
+      nilaiBody.appendChild(headerRow);
+      currentNo++;
 
+      // Baris untuk setiap item dalam kategori berdasarkan header index
+      subject.headerIndices.forEach((headerIndex) => {
+        const row = document.createElement("tr");
+        
+        // Ambil nama mata pelajaran dan nilai berdasarkan urutan parameter
+        let subjectName = "";
+        let score = 65;
+        
+        // Cari parameter yang sesuai dengan urutan header
+        if (headerIndex < allNilaiParams.length) {
+          subjectName = allNilaiParams[headerIndex]?.name || "";
+          score = allNilaiParams[headerIndex]?.score || 65;
+        }
+        
+        const isLowScore = score < 65;
+        const scoreClass = isLowScore ? 'red-score' : '';
+        
+        row.innerHTML = `
+          <td class="subject-row"></td>
+          <td class="subject-row">${subjectName}</td>
+          <td class="subject-row">${toArabicNumber(65)}</td>
+          <td class="subject-row ${scoreClass}">${numberToArabicWord(score)}</td>
+          <td class="subject-row ${scoreClass}">${toArabicNumber(score)}</td>
+          <td class="subject-row ${scoreClass}">${getPredikat(score)}</td>
+        `;
+        nilaiBody.appendChild(row);
+      });
+    });
+
+    // Tambahkan section absensi
+    const absenceHeaderRow = document.createElement("tr");
+    absenceHeaderRow.innerHTML = `
+      <td class="subject-header">${toArabicNumber(currentNo)}</td>
+      <td colspan="5" class="category-header">أيام الغياب</td>
+    `;
+    nilaiBody.appendChild(absenceHeaderRow);
+
+    // Baris absensi
+    const absenceTypes = ["المرض", "الاستئذان", "بغير عذر"];
+    absenceTypes.forEach((type) => {
       const row = document.createElement("tr");
+      const value = absenceParams[type] || "0";
+      
       row.innerHTML = `
-        <td>${toArabicNumber(no++)}</td>
-        <td>${key}</td>
-        <td>${toArabicNumber(score)}</td>
-        <td>${numberToArabicWord(score)}</td>
-        <td>${getPredikat(score)}</td>
+        <td class="absence-section"></td>
+        <td class="absence-section">${type}</td>
+        <td class="absence-section"></td>
+        <td class="absence-section">${numberToArabicWord(parseInt(value) || 0)}</td>
+        <td class="absence-section">${toArabicNumber(value)}</td>
+        <td class="absence-section"></td>
       `;
       nilaiBody.appendChild(row);
-    }
+    });
 
     function downloadPDF() {
       const element = document.getElementById("printArea");
+      
+      // Buat nama file dengan format KASYFUDDIROJAT_NAMA SANTRI
+      // Bersihkan nama dari karakter yang tidak valid untuk nama file
+      const cleanNama = nama.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
+      const fileName = `KASYFUDDIROJAT_${cleanNama}.pdf`;
+      
       const opt = {
-        margin:       0,
-        filename:     'raport.pdf',
+        margin:       [12.7, 12.7, 12.7, 12.7], // Narrow margins sama dengan Word
+        filename:     fileName,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas:  { 
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          letterRendering: true,
+          scrollX: 0,
+          scrollY: 0,
+          width: 210 * 3.78, // A4 width 210mm converted to pixels
+          height: 297 * 3.78 // A4 height 297mm converted to pixels
+        },
+        jsPDF:        { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait',
+          compress: true
+        },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
+      
       html2pdf().from(element).set(opt).save();
     }
   </script>
